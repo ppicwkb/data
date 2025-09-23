@@ -1,492 +1,820 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monitoring Stok GIM</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
-      min-height: 100vh;
-    }
-    .glass {
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 4px 24px 0 rgba(30,41,59,0.08);
-      backdrop-filter: blur(3px);
-    }
-    .fade-in { animation: fadeIn .6s cubic-bezier(.4,0,.2,1);}
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    .hover-row:hover {background-color: #F3F4F6; transition:.2s;}
-    .loading-spinner {
-      border: 3px solid rgba(0,0,0,0.1);
-      border-top: 3px solid #6366f1;
-      border-radius: 50%;
-      width: 24px; height: 24px;
-      animation: spin 1s linear infinite; margin:0 auto;
-    }
-    @keyframes spin { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
-    @media (max-width:640px){table{display:none!important;} #mobileTable{display:block;}}
-    @media (min-width:641px){#mobileTable{display:none;}}
-    .pagination-btn { min-width: 40px; min-height: 40px; font-size: 1rem;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPIC Dashboard - PT. WKB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        .card-hover:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+        }
+        .card-hover:active {
+            transform: translateY(-8px) scale(1.01);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .8; }
+        }
+        .mobile-menu-btn {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            .desktop-nav {
+                display: none;
+            }
+        }
+        .floating-action {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 40;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        .floating-action.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+            background: rgba(15, 23, 42, 0.7);
+        }
+    </style>
 </head>
-<body class="p-2 md:p-6">
-  <div class="max-w-6xl mx-auto glass rounded-2xl overflow-hidden">
+<body class="bg-gray-50 min-h-screen">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-indigo-600 to-blue-700 p-6">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="flex items-center mb-4 md:mb-0">
-          <div class="bg-gradient-to-tr from-blue-500 via-indigo-500 to-pink-400 p-1 rounded-full shadow-lg mr-4">
-            <!-- Modern SVG Logo -->
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-              <defs>
-                <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#0ea5e9"/>
-                  <stop offset="100%" stop-color="#a21caf"/>
-                </linearGradient>
-              </defs>
-              <circle cx="24" cy="24" r="22" fill="#fff" stroke="url(#logo-gradient)" stroke-width="4"/>
-              <g>
-                <rect x="17" y="17" width="14" height="14" rx="4" fill="url(#logo-gradient)" />
-                <circle cx="24" cy="24" r="4" fill="#fff"/>
-              </g>
-            </svg>
-          </div>
-          <div>
-            <h1 class="text-3xl font-extrabold text-white tracking-tight drop-shadow-sm">Stock on GIM</h1>
-            <p class="text-blue-100 text-xs md:text-sm mt-1">PPIC WKB</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <div id="lastUpdate" class="text-blue-100 ml-0 md:ml-4 text-xs md:text-sm block">
-            Terakhir diperbarui: <span id="updateTime">-</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Dashboard Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-6 bg-gray-50 border-b">
-      <div class="bg-white glass p-5 rounded-xl shadow-sm border border-gray-100">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-xs">Total Produk</p>
-            <h3 id="totalProducts" class="text-2xl font-extrabold text-indigo-700">-</h3>
-          </div>
-          <div class="bg-indigo-100 p-3 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10" />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white glass p-5 rounded-xl shadow-sm border border-gray-100">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-xs">Total Stok</p>
-            <h3 id="totalStock" class="text-2xl font-extrabold text-green-700">-</h3>
-          </div>
-          <div class="bg-green-100 p-3 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002-2" />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div class="bg-white glass p-5 rounded-xl shadow-sm border border-gray-100">
-        <div class="flex justify-between items-center">
-          <div>
-            <p class="text-gray-500 text-xs">Lokasi Gudang</p>
-            <h3 id="totalLocations" class="text-2xl font-extrabold text-purple-700">-</h3>
-          </div>
-          <div class="bg-purple-100 p-3 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Export PDF Centered Button -->
-    <div class="flex justify-center my-6">
-      <button id="exportPdfBtn" class="bg-gradient-to-r from-pink-500 to-indigo-600 text-white px-7 py-3 rounded-full shadow-xl hover:scale-105 hover:shadow-2xl transition-all duration-200 flex items-center text-lg font-bold gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Export PDF
-      </button>
-    </div>
-    <!-- Search and Filter -->
-    <div class="p-2 md:p-6">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 space-y-4 md:space-y-0">
-        <div class="relative flex-grow md:max-w-md">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input type="text" id="search" placeholder="Cari produk, ID, atau lokasi..." 
-                 class="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none bg-white shadow-sm transition-all">
-        </div>
-        <div class="flex space-x-2">
-          <select id="locationFilter" class="bg-white border border-gray-300 text-gray-700 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none shadow-sm">
-            <option value="">Semua Lokasi</option>
-          </select>
-          <!-- Filter ID: filter berdasarkan ID produk -->
-          <input type="text" id="idFilter" placeholder="Filter ID" class="border border-gray-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none shadow-sm w-32">
-        </div>
-      </div>
-      <div class="overflow-x-auto rounded-xl border border-gray-200 glass shadow">
-        <table id="stockTable" class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer" data-sort="id">
-                ID
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer" data-sort="nama">
-                Nama Produk
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hidden sm:table-cell" data-sort="palet">
-                No Palet
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer hidden sm:table-cell" data-sort="lokasi">
-                Lokasi
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider cursor-pointer" data-sort="stok">
-                Jumlah Stok
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
-            <tr>
-              <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                <div class="flex flex-col items-center">
-                  <div class="loading-spinner mb-4"></div>
-                  <p>Memuat data dari Google Sheets...</p>
+    <header class="gradient-bg text-white shadow-2xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-xl p-2 sm:p-3 font-bold text-lg sm:text-xl shadow-lg relative overflow-hidden">
+                        <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+                        <span class="relative z-10">WKB</span>
+                        <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-xl sm:text-2xl font-bold">PPIC Dashboard</h1>
+                        <p class="text-slate-200 text-xs sm:text-sm">Production Planning & Inventory Control</p>
+                    </div>
+                    <div class="sm:hidden">
+                        <h1 class="text-lg font-bold">PPIC</h1>
+                        <p class="text-slate-200 text-xs">Dashboard</p>
+                    </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- Mobile card list -->
-        <div id="mobileTable" class="space-y-4 my-2"></div>
-      </div>
-      <!-- Pagination -->
-      <div class="flex items-center justify-between mt-4">
-        <div class="text-xs md:text-sm text-gray-500">
-          Menampilkan <span id="showing">0</span> dari <span id="totalItems">0</span> item
-        </div>
-        <div class="flex space-x-2">
-          <button id="prevPage" class="pagination-btn px-2 py-1 border border-gray-300 rounded-md text-sm md:px-3" aria-label="Sebelumnya">
-            &laquo;
-          </button>
-          <div id="pageNumbers" class="flex space-x-1"></div>
-          <button id="nextPage" class="pagination-btn px-2 py-1 border border-gray-300 rounded-md text-sm md:px-3" aria-label="Selanjutnya">
-            &raquo;
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script>
-    // Variabel & URL Google Sheet sama
-    const SHEET_ID = "1kWuc2yMEAeeHQkC5sVvGdNEwH8YLpif2aIQL8qzF3ds";
-    const SHEET_NAME = "Sheet1";
-    const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
-    const LAST_UPDATE_CELL_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}&range=G1`;
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex items-center space-x-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-2 h-2 bg-green-400 rounded-full pulse-animation"></div>
+                        <span class="text-sm text-slate-200">Online</span>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-slate-200">Selamat datang</p>
+                        <p class="font-semibold">Admin PPIC</p>
+                    </div>
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-lg">👤</span>
+                    </div>
+                </div>
 
-    let allData = [];
-    let filteredData = [];
-    let currentPage = 1;
-    let itemsPerPage = 10;
-    let currentSort = { column: 'id', direction: 'asc' };
-    let uniqueLocations = new Set();
-    let lastUpdateValue = '-';
-
-    function fetchLastUpdateTime() {
-      fetch(LAST_UPDATE_CELL_URL)
-        .then(res => res.text())
-        .then(data => {
-          try {
-            const json = JSON.parse(data.substr(47).slice(0, -2));
-            let val = json.table.rows[0]?.c[0]?.v || '-';
-            lastUpdateValue = val;
-            document.getElementById('updateTime').textContent = val;
-          } catch {
-            document.getElementById('updateTime').textContent = '-';
-          }
-        }).catch(() => {
-          document.getElementById('updateTime').textContent = '-';
-        });
-    }
-
-    function loadSheetData() {
-      document.getElementById('tableBody').innerHTML = `
-        <tr>
-          <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-            <div class="flex flex-col items-center">
-              <div class="loading-spinner mb-4"></div>
-              <p>Memuat data dari Google Sheets...</p>
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
-          </td>
-        </tr>
-      `;
-      fetch(API_URL)
-        .then(res => res.text())
-        .then(data => {
-          try {
-            const jsonData = JSON.parse(data.substr(47).slice(0, -2));
-            const rows = jsonData.table.rows;
-            allData = [];
-            uniqueLocations = new Set();
-            rows.forEach(row => {
-              if (row.c) {
-                let id = row.c[0]?.v || "";
-                let nama = row.c[1]?.v || "";
-                let palet = row.c[2]?.v || "";
-                let lokasi = row.c[3]?.v || "";
-                let stok = row.c[4]?.v || 0;
-                allData.push({
-                  id: id,
-                  nama: nama,
-                  palet: palet,
-                  lokasi: lokasi,
-                  stok: parseInt(stok) || 0
-                });
-                if (lokasi) uniqueLocations.add(lokasi);
-              }
-            });
-            updateLocationFilter();
-            updateDashboardSummary();
-            applyFiltersAndSort();
-            fetchLastUpdateTime();
-          } catch (error) {
-            document.getElementById('tableBody').innerHTML = `
-              <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-red-500">
-                  Gagal memuat data. Silakan coba lagi.
-                </td>
-              </tr>
-            `;
-          }
-        })
-        .catch(() => {
-          document.getElementById('tableBody').innerHTML = `
-            <tr>
-              <td colspan="6" class="px-6 py-4 text-center text-red-500">
-                Gagal terhubung ke Google Sheets. Periksa koneksi Anda dan pastikan spreadsheet telah dibagikan untuk publik.
-              </td>
-            </tr>
-          `;
-        });
-    }
+        </div>
 
-    function updateLocationFilter() {
-      const locationFilter = document.getElementById('locationFilter');
-      locationFilter.innerHTML = '<option value="">Semua Lokasi</option>';
-      Array.from(uniqueLocations).sort().forEach(location => {
-        locationFilter.innerHTML += `<option value="${location}">${location}</option>`;
-      });
-    }
-    function updateDashboardSummary() {
-      document.getElementById('totalProducts').textContent = allData.length;
-      const totalStock = allData.reduce((sum, item) => sum + item.stok, 0);
-      document.getElementById('totalStock').textContent = totalStock.toLocaleString();
-      document.getElementById('totalLocations').textContent = uniqueLocations.size;
-    }
-    function applyFiltersAndSort() {
-      const searchTerm = document.getElementById('search').value.toLowerCase();
-      const locationFilter = document.getElementById('locationFilter').value;
-      // Custom: Filter ID
-      const idFilter = document.getElementById('idFilter').value.trim().toLowerCase();
-      filteredData = allData.filter(item => {
-        const matchesSearch = 
-          item.id.toString().toLowerCase().includes(searchTerm) ||
-          item.nama.toLowerCase().includes(searchTerm) ||
-          item.palet.toString().toLowerCase().includes(searchTerm) ||
-          item.lokasi.toLowerCase().includes(searchTerm);
-        const matchesLocation = locationFilter === '' || item.lokasi === locationFilter;
-        const matchesId = idFilter === '' || item.id.toString().toLowerCase().includes(idFilter);
-        return matchesSearch && matchesLocation && matchesId;
-      });
-      filteredData.sort((a, b) => {
-        const aValue = a[currentSort.column];
-        const bValue = b[currentSort.column];
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-          return currentSort.direction === 'asc'
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue);
-        } else {
-          return currentSort.direction === 'asc'
-            ? aValue - bValue
-            : bValue - aValue;
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-800/95 backdrop-blur-lg border-t border-white/10">
+            <div class="px-4 py-4 space-y-3">
+                <div class="flex items-center space-x-3 pb-3 border-b border-white/10">
+                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-sm">👤</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-sm">Admin PPIC</p>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            <span class="text-xs text-slate-300">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="showInfo()" class="w-full text-left py-2 px-3 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    ℹ️ Info Sistem
+                </button>
+                <button onclick="scrollToMenu()" class="w-full text-left py-2 px-3 rounded-lg hover:bg-white/10 transition-colors text-sm">
+                    📱 Menu Utama
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Main Menu Grid -->
+    <section id="menu-section" class="container mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <div class="text-center mb-16">
+            <h3 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-4">Menu Utama PPIC</h3>
+            <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto">Pilih menu untuk mengakses fitur yang dibutuhkan dengan interface yang modern dan responsif</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
+            <!-- ORDER Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-blue-100 hover:border-blue-300" onclick="openOrderPage()">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">📦</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">ORDER</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Lihat dan kelola data order masuk dari customer</p>
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Masuk</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOK Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-teal-100 hover:border-teal-300" onclick="showStokOptions()">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-teal-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">📊</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-teal-600 transition-colors">STOK</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring stok berdasarkan jenis produk</p>
+                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-teal-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Pilih</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOK CS Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-green-100 hover:border-green-300" onclick="navigateToPage('stok-cs')">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 via-green-600 to-emerald-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-green-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🏭</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-green-600 transition-colors">STOK CS</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring stok Cold Storage (produk jadi)</p>
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-green-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Masuk</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOK GIM Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-purple-100 hover:border-purple-300" onclick="showGimOptions()">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 via-purple-600 to-pink-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-purple-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🏢</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-purple-600 transition-colors">STOK GIM</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring stok Gudang In Material (bahan baku)</p>
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Pilih</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HITUNG KONTAINER Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-orange-100 hover:border-orange-300" onclick="navigateToPage('hitung-kontainer')">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-500 via-orange-600 to-red-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-orange-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🚢</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-orange-600 transition-colors">HITUNG KONTAINER</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Estimasi kebutuhan kontainer untuk pengiriman</p>
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-orange-600 group-hover:to-red-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Hitung</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WKB KODE Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-red-100 hover:border-red-300" onclick="navigateToPage('wkb-kode')">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-red-600 to-pink-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-red-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🔢</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-red-600 transition-colors">WKB KODE</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Database kode produk/material WKB</p>
+                    <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-red-600 group-hover:to-pink-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Cari</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PACKAGING Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-indigo-100 hover:border-indigo-300" onclick="navigateToPage('packaging')">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🎁</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">PACKAGING</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring kebutuhan & status packaging</p>
+                    <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Monitor</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Floating Action Button -->
+    <div class="floating-action">
+        <button onclick="scrollToMenu()" class="bg-slate-800 hover:bg-slate-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 sm:py-16 mt-20">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-xl p-3 font-bold text-xl shadow-lg relative overflow-hidden">
+                            <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+                            <span class="relative z-10">WKB</span>
+                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">PPIC Dashboard</h4>
+                            <p class="text-slate-400 text-sm">Production Planning & Inventory Control</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed max-w-md">
+                        Sistem dashboard terintegrasi untuk monitoring dan kontrol data PPIC secara real-time dengan interface modern dan responsif.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 text-white">Kontak PPIC</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
+                            <span class="text-lg">📧</span>
+                            <span class="text-sm">ppic@wkb.co.id</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
+                            <span class="text-lg">📱</span>
+                            <span class="text-sm">+62 812-3456-7890</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
+                            <span class="text-lg">☎️</span>
+                            <span class="text-sm">Ext: 2301</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-6 text-white">Sistem Info</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">Versi:</span>
+                            <span class="text-white font-medium text-sm">2.1.0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">Update:</span>
+                            <span class="text-white font-medium text-sm">Des 2024</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-slate-300 text-sm">Status:</span>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-green-400 rounded-full pulse-animation"></div>
+                                <span class="text-green-400 font-medium text-sm">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-700 mt-12 pt-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                    <p class="text-slate-400 text-sm text-center sm:text-left">
+                        &copy; 2024 PT. WKB - PPIC Dashboard. All rights reserved.
+                    </p>
+                    <div class="flex items-center space-x-6">
+                        <span class="text-slate-400 text-sm">Powered by</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-slate-300 font-medium text-sm">Canva Code</span>
+                            <span class="text-lg">⚡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Info -->
+    <div id="infoModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="infoModalContent">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">ℹ️</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Informasi Sistem</h3>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="flex items-start space-x-3">
+                    <span class="text-blue-500 mt-1">✓</span>
+                    <span class="text-slate-600">Dashboard terintegrasi untuk monitoring PPIC</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-blue-500 mt-1">✓</span>
+                    <span class="text-slate-600">Real-time data order dan stok</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-blue-500 mt-1">✓</span>
+                    <span class="text-slate-600">Kalkulator kontainer otomatis</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-blue-500 mt-1">✓</span>
+                    <span class="text-slate-600">Database kode produk lengkap</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <span class="text-blue-500 mt-1">✓</span>
+                    <span class="text-slate-600">Responsive design untuk semua device</span>
+                </div>
+            </div>
+            
+            <button onclick="closeInfo()" class="w-full bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal STOK Options -->
+    <div id="stokModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">📊</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Jenis Stok</h3>
+                <p class="text-slate-600 text-sm mt-2">Monitoring stok berdasarkan kategori produk</p>
+            </div>
+            
+            <div class="space-y-3 mb-8">
+                <button onclick="navigateToPage('stok-konven')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍤</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">KONVEN</div>
+                            <div class="text-sm text-teal-100">Stok produk konvensional</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+                
+                <button onclick="navigateToPage('stok-nobashi-ebi')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🦐</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">NOBASHI EBI</div>
+                            <div class="text-sm text-teal-100">Stok udang nobashi</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+
+                <button onclick="navigateToPage('stok-sushi-ebi')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍣</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">SUSHI EBI</div>
+                            <div class="text-sm text-teal-100">Stok udang sushi</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+
+                <button onclick="navigateToPage('stok-ebifry')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍤</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">EBIFRY</div>
+                            <div class="text-sm text-teal-100">Stok ebi fry</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+            </div>
+            
+            <button onclick="closeStokOptions()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Batal
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal GIM Options -->
+    <div id="gimModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="gimModalContent">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">🏢</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Menu STOK GIM</h3>
+                <p class="text-slate-600 text-sm mt-2">Gudang In Material - Bahan baku</p>
+            </div>
+            
+            <div class="space-y-3 mb-8">
+                <button onclick="window.open('https://ppicwg.github.io/Sohgim/', '_blank')" class="w-full bg-purple-500 hover:bg-purple-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">📊</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">SOH GIM</div>
+                            <div class="text-sm text-purple-100">Stock on Hand - Ringkasan stok</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+                
+                <button onclick="navigateToPage('detail-gim')" class="w-full bg-purple-500 hover:bg-purple-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">📋</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Detail GIM</div>
+                            <div class="text-sm text-purple-100">Detail lengkap per material</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+            </div>
+            
+            <button onclick="closeGimOptions()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Batal
+            </button>
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div id="comingSoonModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-3 sm:p-4">
+        <div class="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 max-w-sm sm:max-w-lg lg:max-w-2xl w-full mx-auto transform transition-all duration-300 text-center max-h-[95vh] overflow-y-auto" id="comingSoonModalContent">
+            <!-- Header Section -->
+            <div class="mb-6 sm:mb-8">
+                <div class="relative mb-4 sm:mb-6">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto shadow-2xl">
+                        <span class="text-2xl sm:text-3xl lg:text-4xl animate-bounce">🚀</span>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-ping"></div>
+                </div>
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-4">Coming Soon!</h3>
+                <p class="text-slate-600 text-sm sm:text-base lg:text-lg px-2" id="comingSoonMessage">Halaman ini sedang dalam tahap pengembangan</p>
+            </div>
+            
+            <!-- Features Grid -->
+            <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 lg:mb-8">
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                    <div class="flex flex-col items-center p-2">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg sm:rounded-xl flex items-center justify-center mb-1 sm:mb-2 shadow-lg">
+                            <span class="text-sm sm:text-lg lg:text-xl">⚡</span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-medium text-slate-700">Fast Loading</span>
+                    </div>
+                    <div class="flex flex-col items-center p-2">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg sm:rounded-xl flex items-center justify-center mb-1 sm:mb-2 shadow-lg">
+                            <span class="text-sm sm:text-lg lg:text-xl">📱</span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-medium text-slate-700">Mobile Ready</span>
+                    </div>
+                    <div class="flex flex-col items-center p-2">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center mb-1 sm:mb-2 shadow-lg">
+                            <span class="text-sm sm:text-lg lg:text-xl">🔒</span>
+                        </div>
+                        <span class="text-xs sm:text-sm font-medium text-slate-700">Secure</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6 lg:mb-8">
+                <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/20">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                        <span class="text-slate-700 font-medium text-sm sm:text-base">Progress Development:</span>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="flex-1 sm:w-24 lg:w-32 bg-gray-200 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-2 rounded-full transition-all duration-1000 ease-out" style="width: 75%"></div>
+                            </div>
+                            <span class="text-sm sm:text-base font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">75%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status List -->
+                <div class="bg-white/40 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/20">
+                    <div class="space-y-2 sm:space-y-3">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-green-600 text-xs">✓</span>
+                            </div>
+                            <span class="text-xs sm:text-sm text-slate-600 flex-1">Database design completed</span>
+                        </div>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-green-600 text-xs">✓</span>
+                            </div>
+                            <span class="text-xs sm:text-sm text-slate-600 flex-1">UI/UX design finalized</span>
+                        </div>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-5 h-5 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <span class="text-yellow-600 text-xs">⏳</span>
+                            </div>
+                            <span class="text-xs sm:text-sm text-slate-600 flex-1">Backend integration in progress</span>
+                        </div>
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+                                <span class="text-gray-400 text-xs">○</span>
+                            </div>
+                            <span class="text-xs sm:text-sm text-slate-400 flex-1">Testing & deployment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 border border-amber-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-4 sm:mb-6 lg:mb-8">
+                <div class="flex items-start space-x-2 sm:space-x-3">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span class="text-sm sm:text-lg">📅</span>
+                    </div>
+                    <div class="text-left flex-1">
+                        <h4 class="font-semibold text-amber-800 mb-1 text-sm sm:text-base">Estimasi Rilis</h4>
+                        <p class="text-xs sm:text-sm text-amber-700 leading-relaxed">Halaman ini diperkirakan akan tersedia dalam <strong>2-3 minggu ke depan</strong></p>
+                        <p class="text-xs text-amber-600 mt-1">Tim development sedang bekerja keras! 💪</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-2 sm:gap-3">
+                <button onclick="closeComingSoon()" class="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg text-sm sm:text-base">
+                    <span class="flex items-center justify-center space-x-2">
+                        <span>🏠</span>
+                        <span>Kembali ke Dashboard</span>
+                    </span>
+                </button>
+                <button onclick="notifyMe()" class="w-full border-2 border-blue-300 hover:border-purple-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 text-blue-600 hover:text-purple-600 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base">
+                    <span class="flex items-center justify-center space-x-2">
+                        <span>🔔</span>
+                        <span>Notify Me</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateToPage(page) {
+            showComingSoon(page);
         }
-      });
-      currentPage = 1;
-      renderTable();
-      renderPagination();
-    }
-    function renderTable() {
-      const tableBody = document.getElementById('tableBody');
-      const mobileTable = document.getElementById('mobileTable');
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
-      const pageData = filteredData.slice(startIndex, endIndex);
-      if (pageData.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">
-          Tidak ada data yang ditemukan</td></tr>`;
-        mobileTable.innerHTML = '';
-        return;
-      }
-      // Desktop
-      tableBody.innerHTML = '';
-      pageData.forEach(item => {
-        const row = document.createElement('tr');
-        row.className = 'hover-row fade-in';
-        row.innerHTML = `
-          <td class="px-6 py-4 text-sm font-semibold text-indigo-900">${item.id}</td>
-          <td class="px-6 py-4 text-sm text-gray-700">${item.nama}</td>
-          <td class="px-6 py-4 text-sm text-gray-700 hidden sm:table-cell">${item.palet}</td>
-          <td class="px-6 py-4 text-sm text-gray-700 hidden sm:table-cell">${item.lokasi}</td>
-          <td class="px-6 py-4 text-sm font-bold text-blue-500">${item.stok}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-      // Mobile card
-      mobileTable.innerHTML = '';
-      pageData.forEach(item => {
-        mobileTable.innerHTML += `
-          <div class="bg-white glass p-4 rounded-xl shadow border flex flex-col space-y-2">
-            <div class="font-bold text-indigo-600">${item.nama}</div>
-            <div>ID: <span class="font-mono text-xs">${item.id}</span></div>
-            <div>Lokasi: <span>${item.lokasi}</span></div>
-            <div>No Palet: <span>${item.palet}</span></div>
-            <div>Stok: <span class="font-extrabold text-blue-500">${item.stok}</span></div>
-          </div>
-        `;
-      });
-      document.getElementById('showing').textContent = pageData.length;
-      document.getElementById('totalItems').textContent = filteredData.length;
-    }
-    function renderPagination() {
-      const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-      const pageNumbers = document.getElementById('pageNumbers');
-      pageNumbers.innerHTML = '';
-      document.getElementById('prevPage').disabled = currentPage === 1;
-      document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
-      function addPageButton(pageNum) {
-        const button = document.createElement('button');
-        button.textContent = pageNum;
-        button.className = pageNum === currentPage 
-          ? 'pagination-btn px-2 py-1 bg-indigo-600 text-white rounded-md text-sm' 
-          : 'pagination-btn px-2 py-1 border border-gray-300 rounded-md text-sm hover:bg-gray-50';
-        button.addEventListener('click', () => {
-          currentPage = pageNum;
-          renderTable();
-          renderPagination();
+
+        function openOrderPage() {
+            window.open('https://ppicwg.github.io/Order/', '_blank');
+        }
+
+        function scrollToMenu() {
+            document.getElementById('menu-section').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Modal functions with smooth animations
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function hideModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showInfo() {
+            showModal('infoModal');
+        }
+
+        function closeInfo() {
+            hideModal('infoModal');
+        }
+
+        function showStokOptions() {
+            showModal('stokModal');
+        }
+
+        function closeStokOptions() {
+            hideModal('stokModal');
+        }
+
+        function showGimOptions() {
+            showModal('gimModal');
+        }
+
+        function closeGimOptions() {
+            hideModal('gimModal');
+        }
+
+        function showComingSoon(page) {
+            const pageNames = {
+                'order': 'ORDER - Data Order Customer',
+                'stok-cs': 'STOK CS - Cold Storage',
+                'stok-konven': 'STOK KONVEN - Produk Konvensional',
+                'stok-nobashi-ebi': 'STOK NOBASHI EBI - Udang Nobashi',
+                'stok-sushi-ebi': 'STOK SUSHI EBI - Udang Sushi',
+                'stok-ebifry': 'STOK EBIFRY - Ebi Fry',
+                'soh-gim': 'SOH GIM - Stock on Hand',
+                'detail-gim': 'Detail GIM - Detail Material',
+                'hitung-kontainer': 'HITUNG KONTAINER - Estimasi Kontainer',
+                'wkb-kode': 'WKB KODE - Database Kode Produk',
+                'packaging': 'PACKAGING - Monitoring Packaging'
+            };
+            
+            const message = `Halaman ${pageNames[page] || page.toUpperCase()} sedang dalam tahap pengembangan`;
+            document.getElementById('comingSoonMessage').textContent = message;
+            showModal('comingSoonModal');
+        }
+
+        function closeComingSoon() {
+            hideModal('comingSoonModal');
+        }
+
+        function notifyMe() {
+            alert('🔔 Terima kasih! Kami akan memberitahu Anda ketika halaman ini sudah siap.\n\nNotifikasi akan dikirim melalui:\n• Email internal\n• WhatsApp grup PPIC\n• Dashboard notification');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('infoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeInfo();
+            }
         });
-        pageNumbers.appendChild(button);
-      }
-      function addEllipsis() {
-        const ellipsis = document.createElement('span');
-        ellipsis.textContent = '...';
-        ellipsis.className = 'px-2 py-1 text-gray-400';
-        pageNumbers.appendChild(ellipsis);
-      }
-      if (totalPages <= 5) {
-        for (let i = 1; i <= totalPages; i++) addPageButton(i);
-      } else {
-        if (currentPage <= 3) {
-          for (let i = 1; i <= 4; i++) addPageButton(i);
-          addEllipsis();
-          addPageButton(totalPages);
-        } else if (currentPage >= totalPages - 2) {
-          addPageButton(1);
-          addEllipsis();
-          for (let i = totalPages - 3; i <= totalPages; i++) addPageButton(i);
-        } else {
-          addPageButton(1);
-          addEllipsis();
-          for (let i = currentPage - 1; i <= currentPage + 1; i++) addPageButton(i);
-          addEllipsis();
-          addPageButton(totalPages);
-        }
-      }
-    }
-    document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
-    function exportToPDF() {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
-      const pageData = filteredData.slice(startIndex, endIndex);
-      const products = pageData.map(item => [
-        item.id, item.nama, item.palet, item.lokasi, item.stok
-      ]);
-      const doc = new jspdf.jsPDF();
-      doc.text("Laporan Stok Gudang", 14, 14);
-      doc.setFontSize(10);
-      doc.text(`Terakhir diperbarui: ${lastUpdateValue}`, 14, 20);
-      doc.autoTable({
-        head: [['ID', 'Nama Produk', 'No Palet', 'Lokasi', 'Stok']],
-        body: products,
-        startY: 26,
-        theme: 'striped',
-        styles: { fontSize: 9 }
-      });
-      doc.save('stok-gudang.pdf');
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSheetData();
-      fetchLastUpdateTime();
-      document.getElementById('search').addEventListener('input', applyFiltersAndSort);
-      document.getElementById('locationFilter').addEventListener('change', applyFiltersAndSort);
-      document.getElementById('idFilter').addEventListener('input', applyFiltersAndSort);
-      document.getElementById('prevPage').addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderTable();
-          renderPagination();
-        }
-      });
-      document.getElementById('nextPage').addEventListener('click', () => {
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderTable();
-          renderPagination();
-        }
-      });
-      document.querySelectorAll('th[data-sort]').forEach(header => {
-        header.addEventListener('click', () => {
-          const column = header.getAttribute('data-sort');
-          if (currentSort.column === column) {
-            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-          } else {
-            currentSort.column = column;
-            currentSort.direction = 'asc';
-          }
-          applyFiltersAndSort();
+
+        document.getElementById('stokModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeStokOptions();
+            }
         });
-      });
-    });
-  </script>
-</body>
+
+        document.getElementById('gimModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGimOptions();
+            }
+        });
+
+        document.getElementById('comingSoonModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeComingSoon();
+            }
+        });
+
+        // Enhanced card interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add enhanced hover effects to cards
+            document.querySelectorAll('.card-hover').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-12px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                card.addEventListener('click', function() {
+                    // Add click animation
+                    this.style.transform = 'translateY(-8px) scale(1.01)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-12px) scale(1.02)';
+                    }, 150);
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+                
+                if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Add smooth scroll behavior for floating action button
+            const floatingBtn = document.querySelector('.floating-action button');
+            if (floatingBtn) {
+                floatingBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Show/hide floating button based on scroll
+            window.addEventListener('scroll', function() {
+                const floatingBtn = document.querySelector('.floating-action');
+                if (window.scrollY > 300) {
+                    floatingBtn.classList.add('show');
+                } else {
+                    floatingBtn.classList.remove('show');
+                }
+            });
+        });
+
+        // Keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any open modals
+                closeInfo();
+                closeStokOptions();
+                closeGimOptions();
+                closeComingSoon();
+                
+                // Close mobile menu
+                document.getElementById('mobileMenu').classList.add('hidden');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'983c094975f7ce4a',t:'MTc1ODY1MTQxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
