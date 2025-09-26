@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPIC Dashboard - PT. WKB</title>
+    <title>PPIC Dashboard - WKB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -180,9 +180,9 @@
                 <div class="absolute -top-10 -right-10 w-20 h-20 bg-teal-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                 <div class="text-center relative z-10">
                     <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                        <span class="text-2xl sm:text-3xl">📊</span>
+                        <span class="text-2xl sm:text-3xl">📋</span>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-teal-600 transition-colors">STOK</h4>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-teal-600 transition-colors">PAPAN PRODUKSI</h4>
                     <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring stok berdasarkan jenis produk</p>
                     <div class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-teal-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
                         <span>Pilih</span>
@@ -275,6 +275,50 @@
                     </div>
                 </div>
             </div>
+      
+
+
+<!-- STOK BREAKDOWN Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-green-100 hover:border-green-300" onclick="window.open('https://drive.google.com/drive/folders/1RjdaED2Ss0nJbwTtoID9W8VCPfmVyF1D?usp=drive_link', '_blank')">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 via-green-600 to-emerald-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-green-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">🔢</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-green-600 transition-colors">BREAKDOWN</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Data Breakdown Loading</p>
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-green-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Masuk</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+       <!-- STOK Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-teal-100 hover:border-teal-300" onclick="showPlanOptions()">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500"></div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-teal-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span class="text-2xl sm:text-3xl">✍</span>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-teal-600 transition-colors">Planning</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Planning produk</p>
+                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-teal-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                        <span>Pilih</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </div>
+                </div>
+            </div>
+      
+      
+      
+      
         </div>
     </section>
 
@@ -346,13 +390,13 @@
             <div class="border-t border-slate-700 mt-12 pt-8">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                     <p class="text-slate-400 text-sm text-center sm:text-left">
-                        &copy; 2025 PT. WKB - PPIC Dashboard. All rights reserved.
+                        &copy; 2025 PPIC Dashboard. All rights reserved.
                     </p>
                     <div class="flex items-center space-x-6">
-                        <span class="text-slate-400 text-sm">Powered by</span>
+                        <span class="text-slate-400 text-sm"> </span>
                         <div class="flex items-center space-x-2">
-                            <span class="text-slate-300 font-medium text-sm">ppic</span>
-                            <span class="text-lg">⚡</span>
+                            <span class="text-slate-300 font-medium text-sm"> </span>
+                            <span class="text-lg">  </span>
                         </div>
                     </div>
                 </div>
@@ -404,7 +448,7 @@
         <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
             <div class="text-center mb-8">
                 <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <span class="text-3xl">📊</span>
+                    <span class="text-3xl">👨‍🏫</span>
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Jenis Stok</h3>
                 <p class="text-slate-600 text-sm mt-2">Monitoring stok berdasarkan kategori produk</p>
@@ -417,51 +461,54 @@
                             <span class="text-xl">🍤</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">KONVEN</div>
-                            <div class="text-sm text-teal-100">Stok produk konvensional</div>
+                            <div class="font-semibold">NE - SE - KONVEN</div>
+                            <div class="text-sm text-teal-100">Stok produk NE - SE - konven</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </button>
                 
-                <button onclick="window.open('https://ppicwkb.github.io/Stock/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                <button onclick="window.open('https://ppicwkb.github.io/ebifry/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
                             <span class="text-xl">🦐</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">NOBASHI EBI</div>
-                            <div class="text-sm text-teal-100">Stok udang nobashi</div>
+                            <div class="font-semibold">EBI FRY</div>
+                            <div class="text-sm text-teal-100">Stok udang Ebi Fry</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </button>
 
-                <button onclick="window.open('https://ppicwkb.github.io/Stock/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                <button onclick="window.open('https://ppicwkb.github.io/Nishimoto/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
                             <span class="text-xl">🍣</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">SUSHI EBI</div>
-                            <div class="text-sm text-teal-100">Stok udang sushi</div>
+                            <div class="font-semibold">NISHIMOTO</div>
+                            <div class="text-sm text-teal-100">Stok udang Nishimoto</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </button>
 
-                <button onclick="navigateToPage('stok-ebifry')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                <button onclick="window.open('https://ppicwkb.github.io/Bahan/', '_blank')"  class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
                             <span class="text-xl">🍤</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">EBIFRY</div>
-                            <div class="text-sm text-teal-100">Stok ebi fry</div>
+                            <div class="font-semibold">BAHAN</div>
+                            <div class="text-sm text-teal-100">Stok Bahan untuk produksi</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
                 </button>
+            
+                
+            
             </div>
             
             <button onclick="closeStokOptions()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
@@ -469,6 +516,84 @@
             </button>
         </div>
     </div>
+
+
+
+  <!-- Modal Plan Options -->
+    <div id="PlanModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">📋</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Plan</h3>
+                <p class="text-slate-600 text-sm mt-2">Plan berdasarkan kategori produk</p>
+            </div>
+            
+            <div class="space-y-3 mb-8">
+                <button onclick="navigateToPage('plan-konven')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍤</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">KONVEN</div>
+                            <div class="text-sm text-teal-100">Plan produk konvensional</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+                
+                <button onclick="navigateToPage('plan-nobashi-ebi')"class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🦐</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">NOBASHI EBI</div>
+                            <div class="text-sm text-teal-100">Plan udang nobashi</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+
+                <button onclick="navigateToPage('plan-sushi-ebi')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍣</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">SUSHI EBI</div>
+                            <div class="text-sm text-teal-100">Plan udang sushi</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+
+                <button onclick="navigateToPage('plan-ebifry')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                            <span class="text-xl">🍤</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">EBIFRY</div>
+                            <div class="text-sm text-teal-100">Plan ebi fry</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+            </div>
+            
+            <button onclick="closePlanOptions()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Batal
+            </button>
+        </div>
+    </div>
+
+
+
+
+
 
     <!-- Modal GIM Options -->
     <div id="gimModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
@@ -689,6 +814,18 @@
             hideModal('gimModal');
         }
 
+
+function showPlanOptions() {
+            showModal('PlanModal');
+        }
+
+        function closePlanOptions() {
+            hideModal('PlanModal');
+        }
+
+
+
+
         function showComingSoon(page) {
             const pageNames = {
                 'order': 'ORDER - Data Order Customer',
@@ -697,6 +834,18 @@
                 'stok-nobashi-ebi': 'STOK NOBASHI EBI - Udang Nobashi',
                 'stok-sushi-ebi': 'STOK SUSHI EBI - Udang Sushi',
                 'stok-ebifry': 'STOK EBIFRY - Ebi Fry',
+                'stok-nichirei': 'STOK - nichirei',
+             
+            'plan-konven': 'PLAN KONVEN - Plan Konvensional',
+                'plan-nobashi-ebi': 'PLAN NOBASHI EBI - Udang Nobashi',
+                'plan-sushi-ebi': 'PLAN SUSHI EBI - Udang Sushi',
+                'plan-ebifry': 'PLAN EBIFRY - Ebi Fry', 
+                        
+             
+            
+                
+                
+            
                 'soh-gim': 'SOH GIM - Stock on Hand',
                 'detail-gim': 'Detail GIM - Detail Material',
                 'hitung-kontainer': 'HITUNG KONTAINER - Estimasi Kontainer',
@@ -736,6 +885,15 @@
             }
         });
 
+     
+     document.getElementById('PlanModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePlanOptions();
+            }
+        });     
+     
+     
+     
         document.getElementById('comingSoonModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeComingSoon();
@@ -802,6 +960,7 @@
                 closeInfo();
                 closeStokOptions();
                 closeGimOptions();
+                closePlanOptions();
                 closeComingSoon();
                 
                 // Close mobile menu
