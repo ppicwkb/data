@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPIC Dashboard - PT. WKB</title>
+    <title>PPIC Dashboard - WKB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -157,8 +157,10 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
+           
+           
             <!-- ORDER Card -->
-            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-blue-100 hover:border-blue-300" onclick="openOrderPage()">
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-blue-100 hover:border-blue-300" onclick="showOrder()">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-500"></div>
                 <div class="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                 <div class="text-center relative z-10">
@@ -175,16 +177,16 @@
             </div>
 
             <!-- STOK Card -->
-            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-teal-100 hover:border-teal-300" onclick="showStokOptions()">
-                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500"></div>
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-teal-100 hover:border-purple-300" onclick="showStokOptions()">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 via-teal-600 to-emerald-500"></div>
                 <div class="absolute -top-10 -right-10 w-20 h-20 bg-teal-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                 <div class="text-center relative z-10">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
                         <span class="text-2xl sm:text-3xl">📋</span>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-teal-600 transition-colors">PAPAN PRODUKSI</h4>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-purple-600 transition-colors">PAPAN PRODUKSI</h4>
                     <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring stok berdasarkan jenis produk</p>
-                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-teal-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
+                    <div class="bg-gradient-to-r from-teal-500 to-purple-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-teal-600 group-hover:to-emerald-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
                         <span>Pilih</span>
                         <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </div>
@@ -259,16 +261,16 @@
                 </div>
             </div>
 
-            <!-- PACKAGING Card -->
-            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-indigo-100 hover:border-indigo-300" onclick="window.open('https://ppicwkb.github.io/Packaging/', '_blank')">
+            <!-- MONITORING Card -->
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-indigo-100 hover:border-indigo-300" onclick="showMonitoring()">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-500"></div>
                 <div class="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
                 <div class="text-center relative z-10">
                     <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                        <span class="text-2xl sm:text-3xl">🎁</span>
+                        <span class="text-2xl sm:text-3xl">🔌</span>
                     </div>
-                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">PACKAGING</h4>
-                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring kebutuhan & status packaging</p>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors">Monitoring Cuci & Plug</h4>
+                    <p class="text-slate-600 text-sm sm:text-base mb-6 leading-relaxed">Monitoring Cuci kontainer & Pluging kontainer</p>
                     <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold group-hover:from-indigo-600 group-hover:to-purple-600 transition-all duration-300 inline-flex items-center space-x-2 shadow-lg">
                         <span>Monitor</span>
                         <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
@@ -278,7 +280,7 @@
       
 
 
-<!-- STOK BREAKDOWN Card -->
+<!-- BREAKDOWN Card -->
             <div class="glass-effect rounded-3xl p-6 sm:p-8 card-hover cursor-pointer group relative overflow-hidden border-2 border-green-100 hover:border-green-300" onclick="window.open('https://drive.google.com/drive/folders/1RjdaED2Ss0nJbwTtoID9W8VCPfmVyF1D?usp=drive_link', '_blank')">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 via-green-600 to-emerald-500"></div>
                 <div class="absolute -top-10 -right-10 w-20 h-20 bg-green-500/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
@@ -443,11 +445,63 @@
         </div>
     </div>
 
+<!-- Modal ORDER Options -->
+    <div id="OrderModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="OrderModalContent">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">📝</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih versi tampilan</h3>
+                <p class="text-slate-600 text-sm mt-2">Monitoring Order</p>
+            </div>
+            
+            <div class="space-y-3 mb-8">
+                <button onclick="window.open('https://ppicwkb.github.io/Order/', '_blank')" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                 <span class="text-xl">🖥️</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Versi 1</div>
+                            <div class="text-sm text-blue-100">Tampilan Detail</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+                
+                <button onclick="window.open('https://ppicwkb.github.io/Order2/', '_blank')" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+              <span class="text-xl">💻</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Versi 2</div>
+                            <div class="text-sm text-blue-100">Tampilan Filter</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+
+             
+          
+            </div>
+            
+            <button onclick="closeOrder()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Batal
+            </button>
+        </div>
+    </div>
+
+
+
+
+
     <!-- Modal STOK Options -->
     <div id="stokModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
         <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="w-16 h-16 bg-purple-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <span class="text-3xl">👨‍🏫</span>
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Jenis Stok</h3>
@@ -523,10 +577,10 @@
     <div id="CSModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
         <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <span class="text-3xl">👨‍🏫</span>
+                <div class="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">🗃️</span>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Versi</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Inventory </h3>
                 <p class="text-slate-600 text-sm mt-2">Monitoring Stok Cs lengkap</p>
             </div>
             
@@ -537,8 +591,8 @@
                       <span class="text-xl">🏭</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">Versi 1</div>
-                            <div class="text-sm text-teal-100">Analis lokasi</div>
+                            <div class="font-semibold">Data lokasi</div>
+                            <div class="text-sm text-teal-100">Data detail lokasi</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
@@ -547,14 +601,15 @@
                 <button onclick="window.open('https://ppicwkb.github.io/detailmc2/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
-                    <span class="text-xl">🚨</span>
+                    <span class="text-xl">🖨️</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">Versi 2</div>
-                            <div class="text-sm text-teal-100">Analis karantina</div>
+                            <div class="font-semibold">Export kode</div>
+                            <div class="text-sm text-teal-100">Detail Analisa kode</div>
                         </div>
                     </div>
-                    
+                  <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button> 
                     
             
             <button onclick="closeCSOptions()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
@@ -565,13 +620,60 @@
 
 
  </div>
+ 
+ 
+ <!-- Modal Monitoring Options -->
+    <div id="MonitoringModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
+        <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="MonitoringModalContent">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-teal-300 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">📑</span>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Versi</h3>
+                <p class="text-slate-600 text-sm mt-2">Monitoring cuci dan plug kontainer</p>
+            </div>
+            
+            <div class="space-y-3 mb-8">
+                <button onclick="window.open('https://ppicwkb.github.io/Cuci/', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                   <span class="text-xl">🚿</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Cuci Kontainer</div>
+                            <div class="text-sm text-teal-100">Data cuci kontainer</div>
+                        </div>
+                    </div>
+                    <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button>
+                
+                <button onclick="window.open('', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                    <span class="text-xl">🔌</span>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-semibold">Plug Kontainer</div>
+                            <div class="text-sm text-teal-100">data plug kontainer</div>
+                        </div>
+                    </div>
+                      <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                </button> 
+                                                   
+            <button onclick="closeMonitoring()" class="w-full border-2 border-slate-300 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-xl font-semibold transition-colors duration-300">
+                Batal
+            </button>
+        </div>
+    </div>
+ </div>
+ 
 
 
   <!-- Modal Plan Options -->
     <div id="PlanModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
         <div class="glass-effect rounded-2xl p-6 sm:p-8 max-w-lg mx-auto transform transition-all duration-300" id="stokModalContent">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div class="w-16 h-16 bg-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <span class="text-3xl">📋</span>
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-slate-800">Pilih Plan</h3>
@@ -579,14 +681,14 @@
             </div>
             
             <div class="space-y-3 mb-8">
-                <button onclick="navigateToPage('plan-konven')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
+                <button onclick="window.open(' ', '_blank')" class="w-full bg-teal-500 hover:bg-teal-600 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
-                            <span class="text-xl">🍤</span>
+                  <span class="text-xl">🚢</span>
                         </div>
                         <div class="text-left">
-                            <div class="font-semibold">KONVEN</div>
-                            <div class="text-sm text-teal-100">Plan produk konvensional</div>
+                            <div class="font-semibold">LOADING</div>
+                            <div class="text-sm text-teal-100">Plan Jadwal loading</div>
                         </div>
                     </div>
                     <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
@@ -637,11 +739,6 @@
             </button>
         </div>
     </div>
-
-
-
-
-
 
     <!-- Modal GIM Options -->
     <div id="gimModal" class="fixed inset-0 modal-backdrop hidden items-center justify-center z-50 p-4">
@@ -845,7 +942,26 @@
         function closeInfo() {
             hideModal('infoModal');
         }
+        
+        
+        
+        function showOrder() {
+            showModal('OrderModal');
+        }
 
+        function closeOrder() {
+            hideModal('OrderModal');
+        }
+       
+        function showMonitoring() {
+            showModal('MonitoringModal');
+        }
+
+        function closeMonitoring() {
+            hideModal('MonitoringModal');
+        }       
+    
+              
         function showStokOptions() {
             showModal('stokModal');
         }
@@ -899,11 +1015,7 @@ function showPlanOptions() {
                 'plan-sushi-ebi': 'PLAN SUSHI EBI - Udang Sushi',
                 'plan-ebifry': 'PLAN EBIFRY - Ebi Fry', 
                         
-             
-            
-                
-                
-            
+                                                                  
                 'soh-gim': 'SOH GIM - Stock on Hand',
                 'detail-gim': 'Detail GIM - Detail Material',
                 'hitung-kontainer': 'HITUNG KONTAINER - Estimasi Kontainer',
@@ -931,6 +1043,12 @@ function showPlanOptions() {
             }
         });
 
+
+document.getElementById('OrderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeInfo();
+            }
+        });
         document.getElementById('stokModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeStokOptions();
@@ -953,6 +1071,12 @@ document.getElementById('CSModal').addEventListener('click', function(e) {
             }
         });
 
+     document.getElementById('MonitoringModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGimOptions();
+            }
+        });
+     
      
      document.getElementById('PlanModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -1030,6 +1154,10 @@ document.getElementById('CSModal').addEventListener('click', function(e) {
                 closeGimOptions();
                 closePlanOptions();
                 closeComingSoon();
+                
+                closeOrderOptions();
+                closeMonitoringOptions();
+                
                 
                 // Close mobile menu
                 document.getElementById('mobileMenu').classList.add('hidden');
